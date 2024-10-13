@@ -1,0 +1,21 @@
+apt update && apt install -y g++
+apt-get install libpcap-dev
+arp -s 10.9.0.6 02:42:0a:09:00:06
+
+--> containers
+seed-attacker : docker exec -it 54 /bin/bash
+
+
+--> compile
+g++ injSYN.cpp -o injSYN
+g++ injACK.cpp -o injACK
+g++ injRSH.cpp -o injRSH
+g++ injSYNACK.cpp -o injSYNACK
+g++ sniffer.cpp -lpcap -o sniffer
+
+
+--> points to note
+1) we are changing .rhosts of 'seed user' not 'root user' so get logged into 'seed user' and do according setup(like arp,cd)
+2) while editing(i.e, adding + +) .rhosts of 10.9.0.5 by impersonating 10.9.0.6 the contents of it must be 10.9.0.6
+3) all ack_num=prev_seq_num+1
+4) must run wireshark in host
